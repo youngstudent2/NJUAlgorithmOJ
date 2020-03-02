@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "iosfwd": "cpp",
+        "iostream": "cpp",
+        "xtree": "cpp",
+        "set": "cpp",
+        "xiosbase": "cpp",
+        "xstring": "cpp"
+    },
+    "code-runner.runInTerminal": true,
+    "code-runner.saveFileBeforeRun": true
+}
