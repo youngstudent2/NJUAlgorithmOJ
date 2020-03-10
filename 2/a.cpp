@@ -1,32 +1,66 @@
 #include<iostream>
 #include<map>
 #include<string>
-#include<set>
+#include<list>
 #include<queue>
 using namespace std;
 
-template<class A>
-inline A insertSort(A s){
-    for(auto i=s.begin()+1;i<s.end();++i){
-        auto tmp = *i;
-        auto j = i-1;
-        for(;j>=s.begin()&&*j>tmp;--j){
-            *(j+1)=*j;
-        }
-        *(j+1)=tmp;
-    }
-    return s;
+unsigned long JSHash(const string& str) {
+	unsigned long hash = 1315423911;
+	for (int i = 0; i < str.length(); ++i) {
+		hash ^= ((hash << 5) + str.at(i) + (hash >> 2));
+	}
+	return hash;
 }
+
 
 string generate_sign(const string &str){
-    return insertSort<string>(str);
+    unsigned short chs[26]={0};
+    for(auto c=str.begin();c!=str.end();++c){
+        ++chs[*c-'a'];
+    }
+    char res[50];
+    for(int i=0;i<26;++i){
+        if(chs[i]){
+            sprintf(res,"%s%c%d",res,'a'+i,chs[i]);
+        }
+    }
+    //cout<<str<<"->"<<res<<endl;
+    return res;
 }
 
-typedef map<string,string>::iterator It;
-class cmp{
+class HashMap{
+    string *mymap;
+    list<int> indexTable;
+    int size;
 public:
-    bool operator()(const It &i1,const It &i2)const {
-        return i1->second<i2->second;
+    HashMap(int size){
+        mymap = new string[size];
+        this->size = size;
+    }
+    void insert(const string &s){
+        unsigned long index = JSHash(generate_sign(s))%size;
+        if(mymap[index]==""){
+            mymap[index]=s;
+
+        }
+        else{
+            //变位词存在 记录变位词
+            //三个变位词会重复记录
+            indexTable.push_back(index);
+            if(mymap[index]>s){
+                mymap[index]=s;
+            }
+        }
+    }
+    void printAll(list<string> &box){
+        indexTable.sort();
+        int last = -1;
+        for(auto i=indexTable.begin();i!=indexTable.end();++i){
+            while(i!=indexTable.end()&&last==*i)++i;//去重
+            box.push_back(mymap[*i]);
+            last=*i;
+        }
     }
 };
 
@@ -36,36 +70,28 @@ int main()
     string str;
 
     int n;
+    
     cin>>n;
+    HashMap h(n<<2);
     map<string,string> strmap;
-    set<map<string,string>::iterator,cmp> ans;
     for(int i=0;i<n;i++){
         cin>>str;
-        string s = generate_sign(str);
-        //cout<<str<<'-'<<s<<endl;
-        auto it = strmap.find(s);
-        if(it!=strmap.end()){ //变位词已存在
-            ans.insert(it);
-            if(it->second>str) //更新字典序更小的变位词
-                it->second=str;
-                
-        }
-        else{ //未存在变位词,装入容器中
-            strmap[s]=str;
-        }
+        h.insert(str);
     }
-    //ans.sort();
-    priority_queue <string,vector<string>,greater<string> > q;
+    list<string> ans;
+    h.printAll(ans);
+    ans.sort();
     cout<<ans.size()<<endl;
-    for(auto i=ans.begin();i!=ans.end();++i){
-        q.push((*i)->second);
+    
+    for(auto a=ans.begin();a!=ans.end();++a){
+        cout<<*a<<endl;
     }
-    for(;!q.empty();q.pop()){
-        cout<<q.top()<<endl;
-    }
+
     return 0;
 }
 /*
 15
 a ew vc tea we eat zoo el le ozo ooz cv a kka akk
+10
+aa bb cc aa liu uil uli j as k
 */
