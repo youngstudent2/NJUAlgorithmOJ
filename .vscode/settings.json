@@ -5,8 +5,7 @@
         "xtree": "cpp",
         "set": "cpp",
         "xiosbase": "cpp",
-        "xstring": "cpp",
-        "ostream": "cpp"
+        "xstring": "cpp"
     },
     "code-runner.runInTerminal": true,
     "code-runner.saveFileBeforeRun": true
