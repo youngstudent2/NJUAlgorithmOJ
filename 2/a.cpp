@@ -30,10 +30,6 @@ public:
     }
 };
 
-bool operator>(const It &i1,const It &i2)const {
-    return i1->second<i2->second;
-}
-
 int main()
 {
     cout<<"wo yi yue du guan yu chao xi de shuo ming"<<endl;
@@ -42,14 +38,14 @@ int main()
     int n;
     cin>>n;
     map<string,string> strmap;
-    priority_queue <It,vector<It>,greater<string> > q;
+    set<map<string,string>::iterator,cmp> ans;//用于避免重复
     for(int i=0;i<n;i++){
         cin>>str;
         string s = generate_sign(str);
         //cout<<str<<'-'<<s<<endl;
         auto it = strmap.find(s);
         if(it!=strmap.end()){ //变位词已存在
-            q.push(it);
+            ans.insert(it);
             if(it->second>str) //更新字典序更小的变位词
                 it->second=str;
                 
@@ -58,8 +54,7 @@ int main()
             strmap[s]=str;
         }
     }
-    //ans.sort();
-    
+    priority_queue <string,vector<string>,greater<string> > q;
     cout<<ans.size()<<endl;
     for(auto i=ans.begin();i!=ans.end();++i){
         q.push((*i)->second);
