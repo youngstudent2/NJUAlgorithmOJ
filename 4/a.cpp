@@ -1,42 +1,37 @@
 #include<iostream>
+/*
 #include<list>
 #include<cstdlib>
-#include<algorithm>
+#include<algorithm>*/
 using namespace std;
 
 int findMedium(int *a,int *b,int len){
-    if(len == 0)
-        return 0;
-    if(len == 1)
-        return *a<=*b?*a:*b;
-    if(len == 2){
-        if(*a<*b){
-            ++a;
-            return *a<=*b?*a:*b;
+    int i = len>>1;
+    int j = len - i;
+    int left = 0;
+    int right = len;
+    while(1){
+        if(((i>0&&j<len)?(a[i-1]<=b[j]):true)
+        &&((j>0&&i<len)?(b[j-1]<=a[i]):true)){
+            return a[i-1]>b[j-1]?a[i-1]:b[j-1];
+        }
+        else if((i>0&&j<len)?(a[i-1]>b[j]):false){
+            right = i-1;
+            i = left+(i-left)/2;
+            j = len - i;
         }
         else{
-            ++b;
-            return *b<=*a?*b:*a;
+            left = i+1;
+            i = i+(right-i+1)/2;
+            j = len - i;
         }
     }
-    int half_len = len/2;
-    int mid1 = *(a+half_len);
-    int mid2 = *(b+half_len);
-    cout<<len<<' '<<mid1<<' '<<mid2<<endl;
-    if(mid1>mid2){
-        if(len&0x1) return findMedium(a,b+half_len,half_len+1);
-        return findMedium(a,b+half_len,half_len);
-    }
-    else if(mid1<mid2){
-        if(len&0x1) return findMedium(a+half_len,b,half_len+1);
-        return findMedium(a+half_len,b,half_len);
-    }
-    else return mid1;
+    return -1;
 }
-
+/*调试用 对拍
 void generator(int &n,int*&a,int*&b){
     list<int> la,lb;
-    n = rand()%10;
+    n = rand()%1000;
     for(int i=0;i<n;i++){
         la.push_back(rand()%200);
         lb.push_back(rand()%200);
@@ -79,10 +74,10 @@ int rightMedium(int* a,int *b,int len){
     return ans;
 
 }
-
+*/
 int main()
 {
-    /*
+    
     int n;
     scanf("%d",&n);
     int *a = new int[n];
@@ -94,8 +89,7 @@ int main()
     
 
     printf("%d",findMedium(a,b,n));
-*/
-/**/
+/*
     srand(100);
     int n,*a,*b;
     for(int i=0;i<500;++i){
@@ -109,7 +103,7 @@ int main()
         }
         free(a);
         free(b);
-    }
+    }*/
     return 0;
 }
 /*
