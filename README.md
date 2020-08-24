@@ -1,3 +1,3 @@
 # NJUAlgorithmOJ
 
-Don't copy directly
+Don't copy 
